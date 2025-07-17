@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ArrowLeft, Download, Mail, Printer } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { generatePDF } from "./pdf-generator"
+import { generateSimplePDF, sendSimpleInvoiceEmail } from "./simple-pdf-generator"
 import { InvoiceCover } from "./invoice-cover"
 import { InvoiceInfoTables } from "./invoice-info-tables"
+import { PrintOptimizer } from "./print-optimizer"
 import type { InvoiceFormData, InvoiceItem } from "./invoice-form"
+import { generateAlternativePDF } from "./alternative-pdf-generator"
 
 interface InvoicePreviewProps {
   formData: InvoiceFormData
@@ -30,19 +32,13 @@ export function InvoicePreview({ formData, items, vat, total, onBack }: InvoiceP
     try {
       setIsGeneratingPDF(true)
       
-      const blob = await generatePDF({
-        formData,
-        items,
-        vat,
-        total,
-        // pageSize,
-      })
+      const blob = await generateSimplePDF('invoice-container', `invoice-${formData.invoiceNumber}.pdf`)
 
       // إنشاء رابط للتحميل
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
-      link.download = `invoice-${formData.invoiceNumber}-${pageSize}.pdf`
+      link.download = `invoice-${formData.invoiceNumber}.pdf`
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
@@ -56,21 +52,24 @@ export function InvoicePreview({ formData, items, vat, total, onBack }: InvoiceP
     }
   }
 
-  const handleEmail = () => {
-    const subject = encodeURIComponent(`فاتورة رقم ${formData.invoiceNumber}`)
-    const body = encodeURIComponent(`
-مرحباً،
-
-مرفق الفاتورة رقم ${formData.invoiceNumber} بتاريخ ${formatDate(formData.invoiceDate)}.
-
-المبلغ الإجمالي: ${formatNumber(total)} ${formData.currency}
-
-شكراً لتعاملكم معنا.
-
-مع تحيات،
-${formData.companyName}
-    `)
-    window.open(`mailto:${formData.clientEmail}?subject=${subject}&body=${body}`)
+  const handleEmail = async () => {
+    try {
+      setIsGeneratingPDF(true)
+      
+      await sendSimpleInvoiceEmail('invoice-container', {
+        formData,
+        items,
+        vat,
+        total,
+        pageSize,
+      })
+      
+    } catch (error) {
+      console.error("Email sending failed:", error)
+      alert("حدث خطأ أثناء إرسال البريد الإلكتروني")
+    } finally {
+      setIsGeneratingPDF(false)
+    }
   }
 
   const formatNumber = (num: number) => {
@@ -87,7 +86,7 @@ ${formData.companyName}
   }
 
   return (
-    <div className="min-h-screen  bg-gray-50 print:bg-white ">
+    <div className="min-h-screen  bg-gray-50 print:bg-white " id="invoice-container">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 p-6 print:hidden">
         <div className="w-full flex items-center justify-between">
@@ -119,19 +118,19 @@ ${formData.companyName}
             <Button
               variant="outline"
               onClick={handlePrint}
-              className="flex items-center gap-2 border-primary text-primary hover:bg-primary hover:text-white font-cairo"
+              className="flex items-center gap-2 border-primary text-white bg-primary  font-cairo"
             >
               <Printer className="h-4 w-4" />
               طباعة
             </Button>
-            <Button
+            {/* <Button
               onClick={handleDownload}
               disabled={isGeneratingPDF}
               className="bg-primary hover:bg-primary/90 text-white font-cairo"
             >
               <Download className="h-4 w-4 mr-2" />
               {isGeneratingPDF ? "جاري الإنشاء..." : "تحميل PDF"}
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>
@@ -258,10 +257,11 @@ ${formData.companyName}
           <Button
             variant="outline"
             onClick={handleEmail}
+            disabled={isGeneratingPDF}
             className="flex items-center gap-2 border-primary text-primary hover:bg-primary hover:text-white font-cairo"
           >
             <Mail className="h-4 w-4" />
-            إرسال بالبريد الإلكتروني
+            {isGeneratingPDF ? "جاري الإرسال..." : "إرسال بالبريد الإلكتروني"}
           </Button>
         </div>
       </div>
