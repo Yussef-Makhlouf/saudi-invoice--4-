@@ -27,11 +27,11 @@ export function InvoicePreview({ formData, items, vat, total, onBack }: InvoiceP
       setIsSendingEmail(true)
       
       // إنشاء رابط البريد الإلكتروني البسيط
-      const subject = encodeURIComponent(`فاتورة رقم ${formData.invoiceNumber}`)
+      const subject = encodeURIComponent(`عرض سعر الكتروني رقم ${formData.invoiceNumber}`)
       const body = encodeURIComponent(`
 مرحباً،
 
-مرفق الفاتورة رقم ${formData.invoiceNumber} بتاريخ ${formatDate(formData.invoiceDate)}.
+مرفق العرض سعر الكتروني رقم ${formData.invoiceNumber} بتاريخ ${formatDate(formData.invoiceDate)}.
 
 المبلغ الإجمالي: ${formatNumber(total)} ${formData.currency}
 
@@ -96,7 +96,7 @@ ${formData.companyName}
       <div className="w-full p-6 print:p-0">
         <Card className="bg-white shadow-lg print:shadow-none">
           <CardContent className="p-8 print:p-8">
-            {/* غلاف الفاتورة */}
+            {/* غلاف العرض سعر الكتروني */}
             <InvoiceCover 
               formData={formData}
               total={total}
@@ -193,6 +193,34 @@ ${formData.companyName}
               </div>
             )}
 
+            {/* QR Code Section */}
+            <div className="mb-8 print:mb-8">
+              <div className="flex items-center gap-2 mb-4 print:mb-4">
+                <div className="w-2 h-2 bg-primary rounded-full"></div>
+                <h2 className="text-xl font-cairo-bold text-primary">ترخيص النشاط التجاري</h2>
+              </div>
+              <div className="bg-gradient-to-r from-primary/5 to-primary/10 border border-primary/20 p-4 sm:p-6 print:p-6 rounded-lg">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+                  <div className="text-center sm:text-right flex-1">
+                    <h3 className="font-cairo-bold text-primary text-base sm:text-lg mb-2">مسح للتحقق من الترخيص</h3>
+                    <p className="text-sm text-gray-600 font-cairo-medium mb-2">ترخيص النشاط التجاري</p>
+                    <p className="text-xs text-gray-500 font-cairo-medium">
+                      استخدم كاميرا هاتفك لمسح الرمز والتحقق من صحة الترخيص
+                    </p>
+                  </div>
+                  <div className="flex-shrink-0">
+                    <div className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 bg-white rounded-lg border-2 border-primary/30 p-2 print:p-2 shadow-sm">
+                      <img 
+                        src="/license.jpg" 
+                        alt="QR Code - ترخيص النشاط التجاري" 
+                        className="w-full h-full object-contain rounded-lg"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Footer */}
             <div className="text-center pt-8 print:pt-8 border-t border-gray-200" >
               <div className="bg-gradient-to-r from-primary/5 to-secondary/5 p-6 print:p-6 rounded-lg" dir="ltr">
@@ -202,21 +230,6 @@ ${formData.companyName}
             </div>
           </CardContent>
         </Card>
-      </div>
-
-      {/* Action Buttons */}
-      <div className="bg-white border-t border-gray-200 p-6 print:hidden">
-        <div className="w-full flex flex-wrap gap-4 justify-center">
-          <Button
-            variant="outline"
-            onClick={handleEmail}
-            disabled={isSendingEmail}
-            className="flex items-center gap-2 border-primary text-primary hover:bg-primary hover:text-white font-cairo"
-          >
-            <Mail className="h-4 w-4" />
-            {isSendingEmail ? "جاري الإرسال..." : "إرسال بالبريد الإلكتروني"}
-          </Button>
-        </div>
       </div>
     </div>
   )

@@ -386,7 +386,7 @@ export const printElement = (elementId: string) => {
         <html lang="ar" dir="rtl">
         <head>
           <meta charset="UTF-8">
-          <title>طباعة الفاتورة</title>
+          <title>طباعة العرض سعر الكتروني</title>
           <style>
             @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap');
             

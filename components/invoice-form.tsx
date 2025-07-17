@@ -17,24 +17,24 @@ import { FileText, Save, Eye } from "lucide-react"
 const invoiceSchema = z.object({
   // Company Information
   companyName: z.string().min(2, "اسم الشركة يجب أن يتكون من حرفين على الأقل"),
-  companyAddress: z.string().min(5, "عنوان الشركة مطلوب"),
+  companyAddress: z.string().min(3, "عنوان الشركة مطلوب"),
   companyCity: z.string().min(2, "المدينة مطلوبة"),
   companyPhone: z.string().min(10, "رقم هاتف صحيح مطلوب"),
   companyEmail: z.string().email("بريد إلكتروني صحيح مطلوب"),
-  vatNumber: z.string().min(15, "الرقم الضريبي يجب أن يتكون من 15 رقماً"),
+  // vatNumber: z.string().min(15, "الرقم الضريبي يجب أن يتكون من 15 رقماً"),
   crNumber: z.string().min(10, "رقم السجل التجاري مطلوب"),
 
   // Client Information
   clientName: z.string().min(2, "اسم العميل مطلوب"),
-  clientAddress: z.string().min(5, "عنوان العميل مطلوب"),
+  clientAddress: z.string().min(3, "عنوان العميل مطلوب"),
   clientCity: z.string().min(2, "مدينة العميل مطلوبة"),
   clientPhone: z.string().min(10, "رقم هاتف العميل مطلوب"),
   clientEmail: z.string().email("بريد إلكتروني صحيح للعميل مطلوب"),
   clientVatNumber: z.string().optional(),
 
   // Invoice Details
-  invoiceNumber: z.string().min(1, "رقم الفاتورة مطلوب"),
-  invoiceDate: z.string().min(1, "تاريخ الفاتورة مطلوب"),
+  invoiceNumber: z.string().min(1, "رقم عرض السعر الكتروني مطلوب"),
+  invoiceDate: z.string().min(1, "تاريخ عرض السعر الكتروني مطلوب"),
   dueDate: z.string().min(1, "تاريخ الاستحقاق مطلوب"),
   currency: z.string().default("SAR"),
 
@@ -66,8 +66,8 @@ export function InvoiceForm() {
       companyCity: "الرياض",
       companyPhone: "+966501234567",
         companyEmail: "info@al-quos-al-masi.com",
-      vatNumber: "300123456789003",
-      crNumber: "10101234567",
+      // vatNumber: " ",
+      crNumber: "7039912352",
       clientName: " ", // تم تحديثه ليكون عربي فقط
       clientAddress: " ",
       clientCity: " ",
@@ -78,7 +78,7 @@ export function InvoiceForm() {
       invoiceDate: new Date().toISOString().split("T")[0],
       dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
       currency: "SAR",
-      paymentTerms: "يجب سداد الفاتورة خلال 30 يوماً من تاريخ الإصدار. قد تطبق رسوم إضافية على المدفوعات المتأخرة.",
+      paymentTerms: "يجب سداد العرض سعر الكتروني خلال 30 يوماً من تاريخ الإصدار. قد تطبق رسوم إضافية على المدفوعات المتأخرة.",
       notes: "",
     },
   })
@@ -123,8 +123,8 @@ export function InvoiceForm() {
               <FileText className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl font-cairo-bold text-primary">فاتورة</h1>
-              <p className="text-neutral-grey mt-1 font-cairo">نموذج فاتوره تابع لشركة القوس الماسي للمقاولات</p>
+              <h1 className="text-3xl font-cairo-bold text-primary">عرض سعر الكتروني</h1>
+              <p className="text-neutral-grey mt-1 font-cairo">نموذج عرض سعر الكتروني تابع لشركة القوس الماسي للمقاولات</p>
             </div>
           </div>
 
@@ -245,7 +245,7 @@ export function InvoiceForm() {
                     </FormItem>
                   )}
                 />
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="vatNumber"
                   render={({ field }) => (
@@ -261,7 +261,7 @@ export function InvoiceForm() {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
                 <FormField
                   control={form.control}
                   name="crNumber"
@@ -404,7 +404,7 @@ export function InvoiceForm() {
             <CardHeader className="bg-accent-blue-1/5 border-b border-gray-200">
               <CardTitle className="flex items-center gap-3 text-xl text-accent-blue-1 font-cairo-bold">
                 <div className="h-3 w-3 bg-accent-blue-1 rounded-full"></div>
-                تفاصيل الفاتورة
+                تفاصيل العرض سعر الكتروني
               </CardTitle>
             </CardHeader>
             <CardContent className="p-8">
@@ -414,10 +414,10 @@ export function InvoiceForm() {
                   name="invoiceNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">رقم الفاتورة</FormLabel>
+                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">رقم عرض السعر الكتروني</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="رقم الفاتورة"
+                          placeholder="رقم عرض السعر الكتروني"
                           {...field}
                           className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
                         />
@@ -431,7 +431,7 @@ export function InvoiceForm() {
                   name="invoiceDate"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">تاريخ الفاتورة</FormLabel>
+                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">تاريخ عرض السعر الكتروني</FormLabel>
                       <FormControl>
                         <Input
                           type="date"
@@ -551,7 +551,7 @@ export function InvoiceForm() {
             <CardHeader className="bg-primary/5 border-b border-gray-200">
               <CardTitle className="flex items-center gap-3 text-xl text-primary font-cairo-bold">
                 <div className="h-3 w-3 bg-primary rounded-full"></div>
-                ملخص الفاتورة
+                ملخص العرض سعر الكتروني
               </CardTitle>
             </CardHeader>
             <CardContent className="p-8">

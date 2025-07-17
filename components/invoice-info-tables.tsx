@@ -54,10 +54,10 @@ export function InvoiceInfoTables({ formData }: InvoiceInfoTablesProps) {
               <span className="font-cairo-bold text-neutral-grey text-sm">البريد الإلكتروني:</span>
               <span className="font-cairo text-sm">{formData.companyEmail}</span>
             </div>
-            <div className="flex justify-between items-center py-2 border-b border-gray-100 print:border-gray-100">
+            {/* <div className="flex justify-between items-center py-2 border-b border-gray-100 print:border-gray-100">
               <span className="font-cairo-bold text-neutral-grey text-sm">الرقم الضريبي:</span>
               <span className="font-cairo text-sm">{formData.vatNumber}</span>
-            </div>
+            </div> */}
             <div className="flex justify-between items-center py-2">
               <span className="font-cairo-bold text-neutral-grey text-sm">رقم السجل التجاري:</span>
               <span className="font-cairo text-sm">{formData.crNumber}</span>
@@ -106,22 +106,22 @@ export function InvoiceInfoTables({ formData }: InvoiceInfoTablesProps) {
         </CardContent>
       </Card>
 
-      {/* تفاصيل الفاتورة */}
+      {/* تفاصيل العرض سعر الكتروني */}
       <Card className="border-accent-blue-1/20 print:border-accent-blue-1/20 lg:col-span-2">
         <CardHeader className="pb-3 print:pb-3">
           <CardTitle className="text-lg font-cairo-bold text-accent-blue-1 flex items-center gap-2">
             <div className="w-2 h-2 bg-accent-blue-1 rounded-full"></div>
-            تفاصيل الفاتورة
+            تفاصيل العرض سعر الكتروني
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-0 print:pt-0">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 print:gap-4">
             <div className="text-center p-3 bg-primary/5 rounded-lg print:bg-primary/5">
-              <p className="font-cairo-bold text-neutral-grey text-sm mb-1">رقم الفاتورة</p>
+              <p className="font-cairo-bold text-neutral-grey text-sm mb-1">رقم عرض السعر الكتروني</p>
               <p className="font-cairo-bold text-primary">{formData.invoiceNumber}</p>
             </div>
             <div className="text-center p-3 bg-secondary/5 rounded-lg print:bg-secondary/5">
-              <p className="font-cairo-bold text-neutral-grey text-sm mb-1">تاريخ الفاتورة</p>
+              <p className="font-cairo-bold text-neutral-grey text-sm mb-1">تاريخ عرض السعر الكتروني</p>
               <p className="font-cairo-bold text-secondary">{formatDate(formData.invoiceDate)}</p>
             </div>
             <div className="text-center p-3 bg-accent-blue-1/5 rounded-lg print:bg-accent-blue-1/5">
