@@ -4,13 +4,8 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ArrowLeft, Mail, Printer } from "lucide-react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { generateSimplePDF, sendSimpleInvoiceEmail } from "./simple-pdf-generator"
 import { InvoiceCover } from "./invoice-cover"
-import { InvoiceInfoTables } from "./invoice-info-tables"
-import { PrintOptimizer } from "./print-optimizer"
 import type { InvoiceFormData, InvoiceItem } from "./invoice-form"
-import { generateAlternativePDF } from "./alternative-pdf-generator"
 
 interface InvoicePreviewProps {
   formData: InvoiceFormData
@@ -21,54 +16,39 @@ interface InvoicePreviewProps {
 }
 
 export function InvoicePreview({ formData, items, vat, total, onBack }: InvoicePreviewProps) {
-  const [pageSize, setPageSize] = useState<'A4' | 'A5' | 'Letter'>('A4')
-  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
+  const [isSendingEmail, setIsSendingEmail] = useState(false)
 
   const handlePrint = () => {
     window.print()
   }
 
-  // const handleDownload = async () => {
-  //   try {
-  //     setIsGeneratingPDF(true)
-      
-  //     const blob = await generateSimplePDF('invoice-container', `invoice-${formData.invoiceNumber}.pdf`)
-
-  //     // إنشاء رابط للتحميل
-  //     const url = URL.createObjectURL(blob)
-  //     const link = document.createElement('a')
-  //     link.href = url
-  //     link.download = `invoice-${formData.invoiceNumber}.pdf`
-  //     document.body.appendChild(link)
-  //     link.click()
-  //     document.body.removeChild(link)
-  //     URL.revokeObjectURL(url)
-
-  //   } catch (error) {
-  //     console.error("PDF generation failed:", error)
-  //     alert("حدث خطأ أثناء إنشاء ملف PDF")
-  //   } finally {
-  //     setIsGeneratingPDF(false)
-  //   }
-  // }
-
   const handleEmail = async () => {
     try {
-      setIsGeneratingPDF(true)
+      setIsSendingEmail(true)
       
-      await sendSimpleInvoiceEmail('invoice-container', {
-        formData,
-        items,
-        vat,
-        total,
-        pageSize,
-      })
+      // إنشاء رابط البريد الإلكتروني البسيط
+      const subject = encodeURIComponent(`فاتورة رقم ${formData.invoiceNumber}`)
+      const body = encodeURIComponent(`
+مرحباً،
+
+مرفق الفاتورة رقم ${formData.invoiceNumber} بتاريخ ${formatDate(formData.invoiceDate)}.
+
+المبلغ الإجمالي: ${formatNumber(total)} ${formData.currency}
+
+شكراً لتعاملكم معنا.
+
+مع تحيات،
+${formData.companyName}
+      `)
+      
+      // فتح تطبيق البريد الإلكتروني
+      window.open(`mailto:${formData.clientEmail}?subject=${subject}&body=${body}`)
       
     } catch (error) {
       console.error("Email sending failed:", error)
       alert("حدث خطأ أثناء إرسال البريد الإلكتروني")
     } finally {
-      setIsGeneratingPDF(false)
+      setIsSendingEmail(false)
     }
   }
 
@@ -100,21 +80,6 @@ export function InvoicePreview({ formData, items, vat, total, onBack }: InvoiceP
           </Button>
 
           <div className="flex gap-2 items-center">
-            {/* Page Size Selector */}
-            {/* <div className="flex items-center gap-2">
-              <label className="text-sm font-cairo-bold text-neutral-grey">حجم الورق:</label>
-              <Select value={pageSize} onValueChange={(value: 'A4' | 'A5' | 'Letter') => setPageSize(value)}>
-                <SelectTrigger className="w-24 h-10">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="A4">A4</SelectItem>
-                  <SelectItem value="A5">A5</SelectItem>
-                  <SelectItem value="Letter">Letter</SelectItem>
-                </SelectContent>
-              </Select>
-            </div> */}
-
             <Button
               variant="outline"
               onClick={handlePrint}
@@ -123,14 +88,6 @@ export function InvoicePreview({ formData, items, vat, total, onBack }: InvoiceP
               <Printer className="h-4 w-4" />
               طباعة
             </Button>
-            {/* <Button
-              onClick={handleDownload}
-              disabled={isGeneratingPDF}
-              className="bg-primary hover:bg-primary/90 text-white font-cairo"
-            >
-              <Download className="h-4 w-4 mr-2" />
-              {isGeneratingPDF ? "جاري الإنشاء..." : "تحميل PDF"}
-            </Button> */}
           </div>
         </div>
       </div>
@@ -146,9 +103,6 @@ export function InvoicePreview({ formData, items, vat, total, onBack }: InvoiceP
               invoiceNumber={formData.invoiceNumber}
               invoiceDate={formData.invoiceDate}
             />
-
-            {/* معلومات الشركة والعميل في جداول منظمة */}
-            {/* <InvoiceInfoTables formData={formData} /> */}
 
             {/* Items Table */}
             <div className="mb-8 print:mb-8">
@@ -243,7 +197,6 @@ export function InvoicePreview({ formData, items, vat, total, onBack }: InvoiceP
             <div className="text-center pt-8 print:pt-8 border-t border-gray-200" >
               <div className="bg-gradient-to-r from-primary/5 to-secondary/5 p-6 print:p-6 rounded-lg" dir="ltr">
                 <p className="text-primary font-cairo-bold text-lg mb-2">شكراً لتعاملكم معنا</p>
-                {/* <p className="text-neutral-grey font-cairo text-sm mb-2">تم إنشاء هذه الفاتورة بواسطة نظام إدارة الفواتير المتقدم</p> */}
                 <p className="text-neutral-grey font-cairo text-xs"> © 2025 {formData.companyName}. جميع الحقوق محفوظة.</p>
               </div>
             </div>
@@ -257,11 +210,11 @@ export function InvoicePreview({ formData, items, vat, total, onBack }: InvoiceP
           <Button
             variant="outline"
             onClick={handleEmail}
-            disabled={isGeneratingPDF}
+            disabled={isSendingEmail}
             className="flex items-center gap-2 border-primary text-primary hover:bg-primary hover:text-white font-cairo"
           >
             <Mail className="h-4 w-4" />
-            {isGeneratingPDF ? "جاري الإرسال..." : "إرسال بالبريد الإلكتروني"}
+            {isSendingEmail ? "جاري الإرسال..." : "إرسال بالبريد الإلكتروني"}
           </Button>
         </div>
       </div>
