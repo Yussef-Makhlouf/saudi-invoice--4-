@@ -1,0 +1,531 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 205 80% 41%; /* #1375bd */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 200 99% 42%; /* #018bd2 */
+    --secondary-foreground: 210 40% 98%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 205 80% 41%; /* #1375bd */
+    --radius: 0.5rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222.2 84% 4.9%;
+    --sidebar-primary: 205 80% 41%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 210 40% 96%;
+    --sidebar-accent-foreground: 222.2 84% 4.9%;
+    --sidebar-border: 214.3 31.8% 91.4%;
+    --sidebar-ring: 205 80% 41%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 205 80% 41%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 200 99% 42%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 205 80% 41%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 222.2 84% 4.9%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 205 80% 41%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 217.2 32.6% 17.5%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217.2 32.6% 17.5%;
+    --sidebar-ring: 205 80% 41%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    direction: rtl;
+    text-align: right;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    direction: rtl;
+    text-align: right;
+    font-family: "Cairo", sans-serif;
+  }
+  
+  /* Arabic text direction and alignment */
+  [dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+  }
+  
+  /* Ensure all text elements respect RTL */
+  h1, h2, h3, h4, h5, h6, p, span, div, label, input, textarea, select {
+    direction: rtl;
+    text-align: right;
+  }
+  
+  /* Form elements RTL support */
+  input, textarea, select {
+    text-align: right;
+    direction: rtl;
+  }
+  
+  /* Table RTL support */
+  table {
+    direction: rtl;
+  }
+  
+  th, td {
+    text-align: right;
+  }
+}
+
+/* Custom Colors */
+.bg-primary {
+  background-color: #1375bd;
+}
+
+.text-primary {
+  color: #1375bd;
+}
+
+.border-primary {
+  border-color: #1375bd;
+}
+
+.bg-secondary {
+  background-color: #018bd2;
+}
+
+.text-secondary {
+  color: #018bd2;
+}
+
+.border-secondary {
+  border-color: #018bd2;
+}
+
+.bg-accent-blue-1 {
+  background-color: #1fade7;
+}
+
+.text-accent-blue-1 {
+  color: #1fade7;
+}
+
+.bg-accent-blue-2 {
+  background-color: #2fc4f6;
+}
+
+.text-accent-blue-2 {
+  color: #2fc4f6;
+}
+
+.bg-neutral-grey {
+  background-color: #595959;
+}
+
+.text-neutral-grey {
+  color: #595959;
+}
+
+/* Cairo Font with enhanced Arabic support */
+.font-cairo {
+  font-family: "Cairo", sans-serif;
+  font-weight: 400;
+  direction: rtl;
+  text-align: right;
+}
+
+.font-cairo-bold {
+  font-family: "Cairo", sans-serif;
+  font-weight: 700;
+  direction: rtl;
+  text-align: right;
+}
+
+/* Legacy font classes for compatibility */
+.font-lama {
+  font-family: "Cairo", sans-serif;
+  font-weight: 400;
+  direction: rtl;
+  text-align: right;
+}
+
+.font-lama-bold {
+  font-family: "Cairo", sans-serif;
+  font-weight: 700;
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL Support */
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Arabic Text Styling with enhanced typography */
+.arabic-text {
+  font-family: "Cairo", sans-serif;
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+  direction: rtl;
+  text-align: right;
+  font-feature-settings: "liga" 1, "kern" 1;
+}
+
+/* Enhanced Arabic typography for headings */
+.arabic-heading {
+  font-family: "Cairo", sans-serif;
+  font-weight: 700;
+  direction: rtl;
+  text-align: right;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+
+/* Arabic number formatting */
+.arabic-numbers {
+  font-feature-settings: "tnum" 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Print Styles with enhanced Arabic support and page sizes */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+    print-color-adjust: exact;
+    direction: rtl;
+    text-align: right;
+    margin: 0;
+    padding: 0;
+  }
+
+  .print\:shadow-none {
+    box-shadow: none !important;
+  }
+
+  .print\:border-none {
+    border: none !important;
+  }
+
+  .print\:p-8 {
+    padding: 2rem !important;
+  }
+
+  /* Page size specific styles */
+  @page {
+    size: A4;
+    margin: 1cm;
+  }
+
+  /* A4 specific styles */
+  .print-a4 {
+    width: 210mm;
+    height: 297mm;
+    padding: 20mm;
+  }
+
+  /* A5 specific styles */
+  .print-a5 {
+    width: 148mm;
+    height: 210mm;
+    padding: 15mm;
+  }
+
+  /* Letter specific styles */
+  .print-letter {
+    width: 8.5in;
+    height: 11in;
+    padding: 0.5in;
+  }
+
+  /* Ensure proper page breaks */
+  .print\:break-inside-avoid {
+    break-inside: avoid;
+  }
+
+  .print\:break-before-page {
+    break-before: page;
+  }
+
+  .print\:break-after-page {
+    break-after: page;
+  }
+
+  /* Optimize table printing */
+  table {
+    break-inside: avoid;
+    direction: rtl;
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tfoot {
+    display: table-footer-group;
+  }
+
+  tr {
+    break-inside: avoid;
+  }
+
+  th, td {
+    text-align: right;
+    direction: rtl;
+    padding: 8px;
+    border: 1px solid #ddd;
+  }
+
+  /* Ensure colors print correctly */
+  .bg-primary {
+    background-color: #1375bd !important;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .bg-secondary {
+    background-color: #018bd2 !important;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .text-primary {
+    color: #1375bd !important;
+  }
+
+  .text-secondary {
+    color: #018bd2 !important;
+  }
+
+  /* Font size adjustments for print */
+  .text-4xl {
+    font-size: 2.5rem !important;
+  }
+
+  .text-3xl {
+    font-size: 2rem !important;
+  }
+
+  .text-2xl {
+    font-size: 1.75rem !important;
+  }
+
+  .text-xl {
+    font-size: 1.5rem !important;
+  }
+
+  /* Margin adjustments for print */
+  .mb-12 {
+    margin-bottom: 2rem !important;
+  }
+
+  .mb-10 {
+    margin-bottom: 1.5rem !important;
+  }
+
+  .mb-8 {
+    margin-bottom: 1rem !important;
+  }
+
+  .p-12 {
+    padding: 2rem !important;
+  }
+
+  .p-8 {
+    padding: 1.5rem !important;
+  }
+
+  .p-6 {
+    padding: 1rem !important;
+  }
+
+  .p-4 {
+    padding: 0.75rem !important;
+  }
+
+  /* Hide elements that shouldn't print */
+  .print\:hidden {
+    display: none !important;
+  }
+
+  /* Show elements only when printing */
+  .print\:block {
+    display: block !important;
+  }
+
+  /* Invoice specific print styles */
+  .invoice-print {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .invoice-header {
+    margin-bottom: 2rem !important;
+    padding-bottom: 1rem !important;
+    border-bottom: 2px solid #1375bd !important;
+  }
+
+  .invoice-section {
+    margin-bottom: 1.5rem !important;
+  }
+
+  .invoice-table {
+    margin-bottom: 2rem !important;
+  }
+
+  .invoice-totals {
+    margin-top: 2rem !important;
+    padding: 1rem !important;
+    background-color: #f8f9fa !important;
+    border: 1px solid #1375bd !important;
+  }
+
+  .invoice-footer {
+    margin-top: 2rem !important;
+    padding-top: 1rem !important;
+    border-top: 1px solid #ddd !important;
+    text-align: center !important;
+  }
+}
+
+/* Mobile Responsive with Arabic support */
+@media (max-width: 768px) {
+  .arabic-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .mobile-table-scroll {
+    overflow-x: auto;
+    direction: rtl;
+  }
+
+  .mobile-form-spacing {
+    margin-bottom: 1rem;
+  }
+
+  .mobile-button-stack {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .mobile-button-stack button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Focus states for Arabic forms */
+.focus\:ring-primary:focus {
+  --tw-ring-color: #1375bd;
+}
+
+.focus\:ring-secondary:focus {
+  --tw-ring-color: #018bd2;
+}
+
+/* Custom scrollbar for Arabic content */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #1375bd;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #018bd2;
+}
+
+/* Text selection for Arabic */
+::selection {
+  background-color: #1375bd;
+  color: white;
+}
+
+::-moz-selection {
+  background-color: #1375bd;
+  color: white;
+}
+
+/* Hover effects for Arabic buttons */
+.hover\:bg-primary\/90:hover {
+  background-color: rgba(19, 117, 189, 0.9);
+}
+
+.hover\:bg-secondary\/90:hover {
+  background-color: rgba(1, 139, 210, 0.9);
+}
+
+/* Focus border colors for Arabic forms */
+.focus\:border-primary:focus {
+  border-color: #1375bd;
+}
+
+.focus\:border-secondary:focus {
+  border-color: #018bd2;
+}
