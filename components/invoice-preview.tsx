@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { ArrowLeft, Download, Mail, Printer } from "lucide-react"
+import { ArrowLeft, Mail, Printer } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { generateSimplePDF, sendSimpleInvoiceEmail } from "./simple-pdf-generator"
 import { InvoiceCover } from "./invoice-cover"
@@ -28,29 +28,29 @@ export function InvoicePreview({ formData, items, vat, total, onBack }: InvoiceP
     window.print()
   }
 
-  const handleDownload = async () => {
-    try {
-      setIsGeneratingPDF(true)
+  // const handleDownload = async () => {
+  //   try {
+  //     setIsGeneratingPDF(true)
       
-      const blob = await generateSimplePDF('invoice-container', `invoice-${formData.invoiceNumber}.pdf`)
+  //     const blob = await generateSimplePDF('invoice-container', `invoice-${formData.invoiceNumber}.pdf`)
 
-      // إنشاء رابط للتحميل
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = `invoice-${formData.invoiceNumber}.pdf`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      URL.revokeObjectURL(url)
+  //     // إنشاء رابط للتحميل
+  //     const url = URL.createObjectURL(blob)
+  //     const link = document.createElement('a')
+  //     link.href = url
+  //     link.download = `invoice-${formData.invoiceNumber}.pdf`
+  //     document.body.appendChild(link)
+  //     link.click()
+  //     document.body.removeChild(link)
+  //     URL.revokeObjectURL(url)
 
-    } catch (error) {
-      console.error("PDF generation failed:", error)
-      alert("حدث خطأ أثناء إنشاء ملف PDF")
-    } finally {
-      setIsGeneratingPDF(false)
-    }
-  }
+  //   } catch (error) {
+  //     console.error("PDF generation failed:", error)
+  //     alert("حدث خطأ أثناء إنشاء ملف PDF")
+  //   } finally {
+  //     setIsGeneratingPDF(false)
+  //   }
+  // }
 
   const handleEmail = async () => {
     try {
