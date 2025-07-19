@@ -62,10 +62,10 @@ export function InvoiceForm() {
     resolver: zodResolver(invoiceSchema),
     defaultValues: {
       companyName: "شركة القوس الماسي للمقاولات", // تم تحديثه ليكون عربي فقط
-      companyAddress: "طريق الملك فهد، حي العليا",
-      companyCity: "الرياض",
-      companyPhone: "+966501234567",
-        companyEmail: "info@al-quos-al-masi.com",
+      companyAddress: "مدينة جدة",
+      companyCity: "جدة",
+      companyPhone: "0559811925",
+      companyEmail: "info@alqawsco.com ",
       // vatNumber: " ",
       crNumber: "7039912352",
       clientName: " ", // تم تحديثه ليكون عربي فقط
