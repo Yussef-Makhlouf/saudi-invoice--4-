@@ -20,7 +20,7 @@ const invoiceSchema = z.object({
   companyAddress: z.string().min(3, "عنوان الشركة مطلوب"),
   companyCity: z.string().min(2, "المدينة مطلوبة"),
   companyPhone: z.string().min(10, "رقم هاتف صحيح مطلوب"),
-  companyEmail: z.string().email("بريد إلكتروني صحيح مطلوب"),
+  companyEmail: z.string().transform(val => val.trim()).pipe(z.string().email("بريد إلكتروني صحيح مطلوب")),
   // vatNumber: z.string().min(15, "الرقم الضريبي يجب أن يتكون من 15 رقماً"),
   crNumber: z.string().min(10, "رقم السجل التجاري مطلوب"),
 
@@ -29,7 +29,7 @@ const invoiceSchema = z.object({
   clientAddress: z.string().min(3, "عنوان العميل مطلوب"),
   clientCity: z.string().min(2, "مدينة العميل مطلوبة"),
   clientPhone: z.string().min(10, "رقم هاتف العميل مطلوب"),
-  clientEmail: z.string().email("بريد إلكتروني صحيح للعميل مطلوب"),
+  clientEmail: z.string().transform(val => val.trim()).pipe(z.string().email("بريد إلكتروني صحيح للعميل مطلوب")),
   clientVatNumber: z.string().optional(),
 
   // Invoice Details
@@ -52,6 +52,8 @@ export interface InvoiceItem {
   unitPrice: number
   discount: number
   total: number
+  advancePayment: number // الدفعة المقدمة
+  remainingAmount: number // المبلغ المتبقي
 }
 
 export function InvoiceForm() {
@@ -65,7 +67,7 @@ export function InvoiceForm() {
       companyAddress: "مدينة جدة",
       companyCity: "جدة",
       companyPhone: "0559811925",
-      companyEmail: "info@alqawsco.com ",
+      companyEmail: "info@alqawsco.com",
       // vatNumber: " ",
       crNumber: "7039912352",
       clientName: " ", // تم تحديثه ليكون عربي فقط

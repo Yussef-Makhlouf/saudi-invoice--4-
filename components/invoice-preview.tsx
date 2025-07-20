@@ -120,6 +120,12 @@ ${formData.companyName}
                       <th className="border border-gray-200 p-4 text-center font-cairo-bold text-sm">السعر الإجمالي</th>
                       <th className="border border-gray-200 p-4 text-center font-cairo-bold text-sm">الخصم</th>
                       <th className="border border-gray-200 p-4 text-center font-cairo-bold text-sm">المجموع</th>
+                      {items.some(item => item.advancePayment > 0) && (
+                        <th className="border border-gray-200 p-4 text-center font-cairo-bold text-sm">الدفعة المقدمة</th>
+                      )}
+                      {items.some(item => item.advancePayment > 0) && (
+                        <th className="border border-gray-200 p-4 text-center font-cairo-bold text-sm">المبلغ المتبقي</th>
+                      )}
                     </tr>
                   </thead>
                   <tbody>
@@ -131,6 +137,16 @@ ${formData.companyName}
                         <td className="border border-gray-200 p-4 text-center font-cairo text-sm">{formatNumber(item.quantity * item.unitPrice)}</td>
                         <td className="border border-gray-200 p-4 text-center font-cairo text-sm text-red-600">{formatNumber(item.discount)}</td>
                         <td className="border border-gray-200 p-4 text-center font-cairo-bold text-sm text-primary">{formatNumber(item.total)}</td>
+                        {item.advancePayment > 0 && (
+                          <td className="border border-gray-200 p-4 text-center font-cairo-bold text-sm text-green-600">
+                            {formatNumber(item.advancePayment)}
+                          </td>
+                        )}
+                        {item.advancePayment > 0 && (
+                          <td className="border border-gray-200 p-4 text-center font-cairo-bold text-sm text-orange-600">
+                            {formatNumber(item.remainingAmount)}
+                          </td>
+                        )}
                       </tr>
                     ))}
                   </tbody>

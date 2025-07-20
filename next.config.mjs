@@ -12,6 +12,7 @@ const nextConfig = {
   experimental: {
     typedRoutes: false,
   },
+  output: "export",
 }
 
 export default nextConfig

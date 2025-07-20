@@ -22,6 +22,7 @@ interface NewItemForm {
   quantity: number
   unitPrice: string
   discount: string
+  advancePayment: string
 }
 
 export function InvoiceTable({ items, setItems }: InvoiceTableProps) {
@@ -32,6 +33,7 @@ export function InvoiceTable({ items, setItems }: InvoiceTableProps) {
     quantity: 1,
     unitPrice: "",
     discount: "",
+    advancePayment: "",
   })
 
   const formatNumber = (num: number) => {
@@ -39,6 +41,8 @@ export function InvoiceTable({ items, setItems }: InvoiceTableProps) {
   }
 
   const columnHelper = createColumnHelper<InvoiceItem>()
+
+  const hasAdvancePayment = items.some(item => item.advancePayment > 0)
 
   const columns = [
     columnHelper.accessor("description", {
@@ -86,6 +90,24 @@ export function InvoiceTable({ items, setItems }: InvoiceTableProps) {
         <div className="text-right font-cairo font-bold text-lg text-primary">{formatNumber(info.getValue())}</div>
       ),
     }),
+    ...(hasAdvancePayment ? [
+      columnHelper.accessor("advancePayment", {
+        header: "الدفعة المقدمة",
+        cell: (info: any) => (
+          <div className="text-right font-cairo font-semibold text-green-600">
+            {formatNumber(info.getValue())}
+          </div>
+        ),
+      }),
+      columnHelper.accessor("remainingAmount", {
+        header: "المبلغ المتبقي",
+        cell: (info: any) => (
+          <div className="text-right font-cairo font-semibold text-orange-600">
+            {formatNumber(info.getValue())}
+          </div>
+        ),
+      }),
+    ] : []),
     columnHelper.display({
       id: "actions",
       header: "الإجراءات",
@@ -124,6 +146,8 @@ export function InvoiceTable({ items, setItems }: InvoiceTableProps) {
     const unitPrice = parseFloat(newItem.unitPrice) || 0
     const discount = parseFloat(newItem.discount) || 0
     const total = newItem.quantity * unitPrice * (1 - discount / 100)
+    const advancePayment = parseFloat(newItem.advancePayment) || 0
+    const remainingAmount = total - advancePayment
     
     const item: InvoiceItem = {
       id: Date.now().toString(),
@@ -132,6 +156,8 @@ export function InvoiceTable({ items, setItems }: InvoiceTableProps) {
       unitPrice,
       discount,
       total,
+      advancePayment,
+      remainingAmount,
     }
 
     setItems([...items, item])
@@ -140,6 +166,7 @@ export function InvoiceTable({ items, setItems }: InvoiceTableProps) {
       quantity: 1,
       unitPrice: "",
       discount: "",
+      advancePayment: "",
     })
     setIsAddingItem(false)
   }
@@ -148,7 +175,8 @@ export function InvoiceTable({ items, setItems }: InvoiceTableProps) {
     if (!editingItem) return
 
     const total = editingItem.quantity * editingItem.unitPrice * (1 - editingItem.discount / 100)
-    const updatedItem = { ...editingItem, total }
+    const remainingAmount = total - editingItem.advancePayment
+    const updatedItem = { ...editingItem, total, remainingAmount }
 
     setItems(items.map((item) => (item.id === editingItem.id ? updatedItem : item)))
     setEditingItem(null)
@@ -226,6 +254,20 @@ export function InvoiceTable({ items, setItems }: InvoiceTableProps) {
                   className="mt-2 h-12 border-gray-300 focus:border-secondary focus:ring-secondary text-right font-cairo"
                 />
               </div>
+              <div>
+                <Label htmlFor="advancePayment" className="text-sm font-cairo-bold text-gray-700">
+                  الدفعة المقدمة
+                </Label>
+                <Input
+                  id="advancePayment"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={newItem.advancePayment}
+                  onChange={(e: any) => setNewItem({ ...newItem, advancePayment: e.target.value })}
+                  className="mt-2 h-12 border-gray-300 focus:border-secondary focus:ring-secondary text-right font-cairo"
+                />
+              </div>
               <div className="flex items-end">
                 <Button
                   onClick={addItem}
@@ -295,6 +337,20 @@ export function InvoiceTable({ items, setItems }: InvoiceTableProps) {
                   min="0"
                   value={editingItem.discount}
                   onChange={(e: any) => setEditingItem({ ...editingItem, discount: Number(e.target.value) })}
+                  className="mt-2 h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-advancePayment" className="text-sm font-cairo-bold text-gray-700">
+                  الدفعة المقدمة
+                </Label>
+                <Input
+                  id="edit-advancePayment"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={editingItem.advancePayment}
+                  onChange={(e: any) => setEditingItem({ ...editingItem, advancePayment: Number(e.target.value) })}
                   className="mt-2 h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
                 />
               </div>
