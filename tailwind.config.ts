@@ -24,11 +24,11 @@ const config: Config = {
   				DEFAULT: 'hsl(var(--popover))',
   				foreground: 'hsl(var(--popover-foreground))'
   			},
-  			primary: '#1375bd',
-  			secondary: '#018bd2',
-  			'accent-blue-1': '#1fade7',
-  			'accent-blue-2': '#4fc3f7',
-  			'neutral-grey': '#666666',
+  			primary: '#186af2',
+  			secondary: '#ea4235',
+  			'accent-blue-1': '#fabc05',
+  			'accent-blue-2': '#fabc05',
+  			'neutral-grey': '#34a853',
   			muted: {
   				DEFAULT: 'hsl(var(--muted))',
   				foreground: 'hsl(var(--muted-foreground))'
@@ -63,10 +63,7 @@ const config: Config = {
   			}
   		},
   		fontFamily: {
-  			cairo: ['var(--font-cairo)', 'Cairo', 'sans-serif'],
-  			'cairo-bold': ['var(--font-cairo)', 'Cairo', 'sans-serif'],
-  			lama: ['var(--font-cairo)', 'Cairo', 'sans-serif'],
-  			'lama-bold': ['var(--font-cairo)', 'Cairo', 'sans-serif'],
+  			handicrafts: ['TheYearofHandicrafts', 'sans-serif'],
   		},
   		direction: {
   			rtl: 'rtl',
@@ -77,9 +74,9 @@ const config: Config = {
   			left: 'left',
   		},
   		borderRadius: {
-  			lg: 'var(--radius)',
-  			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
+  			lg: '1.25rem',
+  			md: '1rem',
+  			sm: '0.75rem'
   		},
   		keyframes: {
   			'accordion-down': {

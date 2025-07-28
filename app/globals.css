@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'TheYearofHandicrafts';
+  src: url('/fonts/TheYearofHandicrafts-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -10,33 +18,33 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 205 80% 41%; /* #1375bd */
-    --primary-foreground: 210 40% 98%;
-    --secondary: 200 99% 42%; /* #018bd2 */
-    --secondary-foreground: 210 40% 98%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 205 80% 41%; /* #1375bd */
-    --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --primary: 220 86% 53%; /* #186af2 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 4 81% 58%; /* #ea4235 */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 48 96% 67%; /* #fabc05 */
+    --muted-foreground: 0 0% 20%;
+    --accent: 142 61% 43%; /* #34a853 */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 4 81% 58%; /* #ea4235 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 86% 90%;
+    --input: 220 86% 90%;
+    --ring: 220 86% 53%;
+    --radius: 1.25rem;
+    --chart-1: 220 86% 53%;
+    --chart-2: 4 81% 58%;
+    --chart-3: 48 96% 67%;
+    --chart-4: 142 61% 43%;
+    --chart-5: 0 0% 60%;
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 222.2 84% 4.9%;
-    --sidebar-primary: 205 80% 41%;
-    --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 210 40% 96%;
-    --sidebar-accent-foreground: 222.2 84% 4.9%;
-    --sidebar-border: 214.3 31.8% 91.4%;
-    --sidebar-ring: 205 80% 41%;
+    --sidebar-primary: 220 86% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 48 96% 67%;
+    --sidebar-accent-foreground: 0 0% 20%;
+    --sidebar-border: 220 86% 90%;
+    --sidebar-ring: 220 86% 53%;
   }
 
   .dark {
@@ -89,7 +97,7 @@
     @apply bg-background text-foreground;
     direction: rtl;
     text-align: right;
-    font-family: "Cairo", sans-serif;
+    font-family: 'TheYearofHandicrafts', sans-serif;
   }
   
   /* Arabic text direction and alignment */
@@ -122,51 +130,43 @@
 
 /* Custom Colors */
 .bg-primary {
-  background-color: #1375bd;
+  background-color: #186af2;
 }
 
 .text-primary {
-  color: #1375bd;
+  color: #186af2;
 }
 
 .border-primary {
-  border-color: #1375bd;
+  border-color: #186af2;
 }
 
 .bg-secondary {
-  background-color: #018bd2;
+  background-color: #ea4235;
 }
 
 .text-secondary {
-  color: #018bd2;
+  color: #ea4235;
 }
 
 .border-secondary {
-  border-color: #018bd2;
+  border-color: #ea4235;
 }
 
-.bg-accent-blue-1 {
-  background-color: #1fade7;
+.bg-accent-blue-1, .bg-accent-blue-2 {
+  background-color: #fabc05;
 }
 
-.text-accent-blue-1 {
-  color: #1fade7;
-}
-
-.bg-accent-blue-2 {
-  background-color: #2fc4f6;
-}
-
-.text-accent-blue-2 {
-  color: #2fc4f6;
+.text-accent-blue-1, .text-accent-blue-2 {
+  color: #fabc05;
 }
 
 .bg-neutral-grey {
-  background-color: #595959;
+  background-color: #34a853;
 }
 
 .text-neutral-grey {
-  color: #595959;
+  color: #34a853;
 }
 
 /* Cairo Font with enhanced Arabic support */
@@ -528,4 +528,11 @@
 
 .focus\:border-secondary:focus {
   border-color: #018bd2;
+}
+
+.font-handicrafts {
+  font-family: 'TheYearofHandicrafts', sans-serif;
+  font-weight: 400;
+  direction: rtl;
+  text-align: right;
 }

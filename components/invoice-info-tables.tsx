@@ -27,7 +27,7 @@ export function InvoiceInfoTables({ formData }: InvoiceInfoTablesProps) {
       {/* معلومات الشركة */}
       <Card className="border-primary/20 print:border-primary/20">
         <CardHeader className="pb-3 print:pb-3">
-          <CardTitle className="text-lg font-cairo-bold text-primary flex items-center gap-2">
+          <CardTitle className="text-lg font-handicrafts text-primary flex items-center gap-2">
             <div className="w-2 h-2 bg-primary rounded-full"></div>
             معلومات الشركة
           </CardTitle>
@@ -35,32 +35,28 @@ export function InvoiceInfoTables({ formData }: InvoiceInfoTablesProps) {
         <CardContent className="pt-0 print:pt-0">
           <div className="space-y-3 print:space-y-3">
             <div className="flex justify-between items-center py-2 border-b border-gray-100 print:border-gray-100">
-              <span className="font-cairo-bold text-neutral-grey text-sm">اسم الشركة:</span>
-              <span className="font-cairo text-sm">{formData.companyName}</span>
+              <span className="font-handicrafts text-neutral-grey text-sm">اسم الشركة:</span>
+              <span className="font-handicrafts text-sm">{formData.companyName}</span>
             </div>
             <div className="flex justify-between items-center py-2 border-b border-gray-100 print:border-gray-100">
-              <span className="font-cairo-bold text-neutral-grey text-sm">العنوان:</span>
-              <span className="font-cairo text-sm text-left">{formData.companyAddress}</span>
+              <span className="font-handicrafts text-neutral-grey text-sm">العنوان:</span>
+              <span className="font-handicrafts text-sm text-left">{formData.companyAddress}</span>
+            </div>
+            <div className="flex justify-between items-center py-2 border-b border-gray-100 print:border-gray-100"> 
+              <span className="font-handicrafts text-neutral-grey text-sm">الهاتف:</span>
+              <span className="font-handicrafts text-sm" dir="ltr">{formData.companyPhone}</span>
             </div>
             <div className="flex justify-between items-center py-2 border-b border-gray-100 print:border-gray-100">
-              <span className="font-cairo-bold text-neutral-grey text-sm">المدينة:</span>
-              <span className="font-cairo text-sm">{formData.companyCity}, المملكة العربية السعودية</span>
-            </div>
-            <div className="flex justify-between items-center py-2 border-b border-gray-100 print:border-gray-100">
-              <span className="font-cairo-bold text-neutral-grey text-sm">الهاتف:</span>
-              <span className="font-cairo text-sm" dir="ltr">{formData.companyPhone}</span>
-            </div>
-            <div className="flex justify-between items-center py-2 border-b border-gray-100 print:border-gray-100">
-              <span className="font-cairo-bold text-neutral-grey text-sm">البريد الإلكتروني:</span>
-              <span className="font-cairo text-sm">{formData.companyEmail}</span>
+              <span className="font-handicrafts text-neutral-grey text-sm">البريد الإلكتروني:</span>
+              <span className="font-handicrafts text-sm">{formData.companyEmail}</span>
             </div>
             {/* <div className="flex justify-between items-center py-2 border-b border-gray-100 print:border-gray-100">
               <span className="font-cairo-bold text-neutral-grey text-sm">الرقم الضريبي:</span>
               <span className="font-cairo text-sm">{formData.vatNumber}</span>
             </div> */}
             <div className="flex justify-between items-center py-2">
-              <span className="font-cairo-bold text-neutral-grey text-sm">رقم السجل التجاري:</span>
-              <span className="font-cairo text-sm">{formData.crNumber}</span>
+              <span className="font-handicrafts text-neutral-grey text-sm">رقم السجل الضريبي:</span>
+              <span className="font-handicrafts text-sm">{formData.crNumber}</span>
             </div>
           </div>
         </CardContent>
@@ -69,7 +65,7 @@ export function InvoiceInfoTables({ formData }: InvoiceInfoTablesProps) {
       {/* معلومات العميل */}
       <Card className="border-secondary/20 print:border-secondary/20">
         <CardHeader className="pb-3 print:pb-3">
-          <CardTitle className="text-lg font-cairo-bold text-secondary flex items-center gap-2">
+          <CardTitle className="text-lg font-handicrafts text-secondary flex items-center gap-2">
             <div className="w-2 h-2 bg-secondary rounded-full"></div>
             معلومات العميل
           </CardTitle>
@@ -77,29 +73,27 @@ export function InvoiceInfoTables({ formData }: InvoiceInfoTablesProps) {
         <CardContent className="pt-0 print:pt-0">
           <div className="space-y-3 print:space-y-3">
             <div className="flex justify-between items-center py-2 border-b border-gray-100 print:border-gray-100">
-              <span className="font-cairo-bold text-neutral-grey text-sm">اسم العميل:</span>
-              <span className="font-cairo text-sm">{formData.clientName}</span>
+              <span className="font-handicrafts text-neutral-grey text-sm">اسم العميل:</span>
+              <span className="font-handicrafts text-sm">{formData.clientName}</span>
             </div>
             <div className="flex justify-between items-center py-2 border-b border-gray-100 print:border-gray-100">
-              <span className="font-cairo-bold text-neutral-grey text-sm">العنوان:</span>
-              <span className="font-cairo text-sm text-left">{formData.clientAddress}</span>
+              <span className="font-handicrafts text-neutral-grey text-sm">العنوان:</span>
+              <span className="font-handicrafts text-sm text-left">{formData.clientAddress}</span>
             </div>
             <div className="flex justify-between items-center py-2 border-b border-gray-100 print:border-gray-100">
-              <span className="font-cairo-bold text-neutral-grey text-sm">المدينة:</span>
-              <span className="font-cairo text-sm">{formData.clientCity}</span>
+              <span className="font-handicrafts text-neutral-grey text-sm">الهاتف:</span>
+              <span className="font-handicrafts text-sm">{formData.clientPhone}</span>
             </div>
-            <div className="flex justify-between items-center py-2 border-b border-gray-100 print:border-gray-100">
-              <span className="font-cairo-bold text-neutral-grey text-sm">الهاتف:</span>
-              <span className="font-cairo text-sm">{formData.clientPhone}</span>
-            </div>
-            <div className="flex justify-between items-center py-2 border-b border-gray-100 print:border-gray-100">
-              <span className="font-cairo-bold text-neutral-grey text-sm">البريد الإلكتروني:</span>
-              <span className="font-cairo text-sm">{formData.clientEmail}</span>
-            </div>
+            {formData.clientEmail && formData.clientEmail.trim() !== "" && (
+              <div className="flex justify-between items-center py-2 border-b border-gray-100 print:border-gray-100">
+                <span className="font-handicrafts text-neutral-grey text-sm">البريد الإلكتروني:</span>
+                <span className="font-handicrafts text-sm">{formData.clientEmail}</span>
+              </div>
+            )}
             {formData.clientVatNumber && (
               <div className="flex justify-between items-center py-2">
-                <span className="font-cairo-bold text-neutral-grey text-sm">الرقم الضريبي:</span>
-                <span className="font-cairo text-sm">{formData.clientVatNumber}</span>
+                <span className="font-handicrafts text-neutral-grey text-sm">السجل الضريبي:</span>
+                <span className="font-handicrafts text-sm">{formData.clientVatNumber}</span>
               </div>
             )}
           </div>
@@ -109,7 +103,7 @@ export function InvoiceInfoTables({ formData }: InvoiceInfoTablesProps) {
       {/* تفاصيل العرض سعر الكتروني */}
       <Card className="border-accent-blue-1/20 print:border-accent-blue-1/20 lg:col-span-2">
         <CardHeader className="pb-3 print:pb-3">
-          <CardTitle className="text-lg font-cairo-bold text-accent-blue-1 flex items-center gap-2">
+          <CardTitle className="text-lg font-handicrafts text-accent-blue-1 flex items-center gap-2">
             <div className="w-2 h-2 bg-accent-blue-1 rounded-full"></div>
             تفاصيل العرض سعر الكتروني
           </CardTitle>
@@ -117,20 +111,20 @@ export function InvoiceInfoTables({ formData }: InvoiceInfoTablesProps) {
         <CardContent className="pt-0 print:pt-0">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 print:gap-4">
             <div className="text-center p-3 bg-primary/5 rounded-lg print:bg-primary/5">
-              <p className="font-cairo-bold text-neutral-grey text-sm mb-1">رقم عرض السعر الكتروني</p>
-              <p className="font-cairo-bold text-primary">{formData.invoiceNumber}</p>
+              <p className="font-handicrafts text-neutral-grey text-sm mb-1">رقم عرض السعر الكتروني</p>
+              <p className="font-handicrafts text-primary">{formData.invoiceNumber}</p>
             </div>
             <div className="text-center p-3 bg-secondary/5 rounded-lg print:bg-secondary/5">
-              <p className="font-cairo-bold text-neutral-grey text-sm mb-1">تاريخ عرض السعر الكتروني</p>
-              <p className="font-cairo-bold text-secondary">{formatDate(formData.invoiceDate)}</p>
+              <p className="font-handicrafts text-neutral-grey text-sm mb-1">تاريخ عرض السعر الكتروني</p>
+              <p className="font-handicrafts text-secondary">{formatDate(formData.invoiceDate)}</p>
             </div>
             <div className="text-center p-3 bg-accent-blue-1/5 rounded-lg print:bg-accent-blue-1/5">
-              <p className="font-cairo-bold text-neutral-grey text-sm mb-1">تاريخ الاستحقاق</p>
-              <p className="font-cairo-bold text-accent-blue-1">{formatDate(formData.dueDate)}</p>
+              <p className="font-handicrafts text-neutral-grey text-sm mb-1">تاريخ الاستحقاق</p>
+              <p className="font-handicrafts text-accent-blue-1">{formatDate(formData.dueDate)}</p>
             </div>
             <div className="text-center p-3 bg-accent-blue-2/5 rounded-lg print:bg-accent-blue-2/5">
-              <p className="font-cairo-bold text-neutral-grey text-sm mb-1">العملة</p>
-              <p className="font-cairo-bold text-accent-blue-2">{formData.currency}</p>
+              <p className="font-handicrafts text-neutral-grey text-sm mb-1">العملة</p>
+              <p className="font-handicrafts text-accent-blue-2">{formData.currency}</p>
             </div>
           </div>
         </CardContent>

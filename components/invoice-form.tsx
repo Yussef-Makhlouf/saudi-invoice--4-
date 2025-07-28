@@ -12,24 +12,22 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { InvoiceTable } from "@/components/invoice-table"
 import { InvoicePreview } from "@/components/invoice-preview"
-import { FileText, Save, Eye } from "lucide-react"
-
+import {  Save, Eye } from "lucide-react"
+import Image from "next/image"
 const invoiceSchema = z.object({
   // Company Information
   companyName: z.string().min(2, "اسم الشركة يجب أن يتكون من حرفين على الأقل"),
   companyAddress: z.string().min(3, "عنوان الشركة مطلوب"),
-  companyCity: z.string().min(2, "المدينة مطلوبة"),
   companyPhone: z.string().min(10, "رقم هاتف صحيح مطلوب"),
   companyEmail: z.string().transform(val => val.trim()).pipe(z.string().email("بريد إلكتروني صحيح مطلوب")),
   // vatNumber: z.string().min(15, "الرقم الضريبي يجب أن يتكون من 15 رقماً"),
-  crNumber: z.string().min(10, "رقم السجل التجاري مطلوب"),
+  crNumber: z.string().min(10, "رقم السجل الضريبي مطلوب"),
 
   // Client Information
   clientName: z.string().min(2, "اسم العميل مطلوب"),
   clientAddress: z.string().min(3, "عنوان العميل مطلوب"),
-  clientCity: z.string().min(2, "مدينة العميل مطلوبة"),
   clientPhone: z.string().min(10, "رقم هاتف العميل مطلوب"),
-  clientEmail: z.string().transform(val => val.trim()).pipe(z.string().email("بريد إلكتروني صحيح للعميل مطلوب")),
+  clientEmail: z.string().transform(val => val.trim()).pipe(z.string().email("بريد إلكتروني صحيح للعميل مطلوب").or(z.literal(""))).optional(),
   clientVatNumber: z.string().optional(),
 
   // Invoice Details
@@ -39,21 +37,20 @@ const invoiceSchema = z.object({
   currency: z.string().default("SAR"),
 
   // Payment Terms
-  paymentTerms: z.string().min(10, "شروط الدفع مطلوبة"),
-  notes: z.string().optional(),
+  paymentTerms: z.string().optional(),
+    notes: z.string().optional(),
 })
 
 export type InvoiceFormData = z.infer<typeof invoiceSchema>
 
 export interface InvoiceItem {
   id: string
-  description: string // هذا الحقل سيحتوي على الوصف باللغة العربية فقط
+  description: string 
   quantity: number
-  unitPrice: number
   discount: number
   total: number
-  advancePayment: number // الدفعة المقدمة
-  remainingAmount: number // المبلغ المتبقي
+  advancePayment: number  
+  remainingAmount: number 
 }
 
 export function InvoiceForm() {
@@ -63,24 +60,22 @@ export function InvoiceForm() {
   const form = useForm<InvoiceFormData>({
     resolver: zodResolver(invoiceSchema),
     defaultValues: {
-      companyName: "شركة القوس الماسي للمقاولات", // تم تحديثه ليكون عربي فقط
-      companyAddress: "مدينة جدة",
-      companyCity: "جدة",
-      companyPhone: "0559811925",
-      companyEmail: "info@alqawsco.com",
+      companyName: "شركة الفشني للدعاية والاعلان والتسويق الالكتروني",   
+      companyAddress: " مــصــر . الــمــنــيــا",
+      companyPhone: "01111263618",
+      companyEmail: "info@fashne.net",
       // vatNumber: " ",
       crNumber: "7039912352",
       clientName: " ", // تم تحديثه ليكون عربي فقط
       clientAddress: " ",
-      clientCity: " ",
       clientPhone: " ",
-      clientEmail: " ",
+      clientEmail: "",
       clientVatNumber: "",
       invoiceNumber: `INV-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`,
       invoiceDate: new Date().toISOString().split("T")[0],
       dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
       currency: "SAR",
-      paymentTerms: "يجب سداد العرض سعر الكتروني خلال 30 يوماً من تاريخ الإصدار. قد تطبق رسوم إضافية على المدفوعات المتأخرة.",
+      paymentTerms: " ",
       notes: "",
     },
   })
@@ -91,12 +86,12 @@ export function InvoiceForm() {
     setShowPreview(true)
   }
 
-  const calculateVAT = () => {
-    return items.reduce((sum, item) => sum + item.total, 0) * 0.15 // 15% VAT in Saudi Arabia
-  }
-
   const calculateTotal = () => {
-    return items.reduce((sum, item) => sum + item.total, 0) + calculateVAT()
+    return items.reduce((sum, item) => {
+      const priceAfterDiscount = item.total * (1 - item.discount / 100)
+      const afterAdvance = priceAfterDiscount - (item.advancePayment || 0)
+      return sum + (afterAdvance > 0 ? afterAdvance : 0)
+    }, 0)
   }
 
   const formatNumber = (num: number) => {
@@ -108,7 +103,7 @@ export function InvoiceForm() {
       <InvoicePreview
         formData={form.getValues()}
         items={items}
-        vat={calculateVAT()}
+        vat={0}
         total={calculateTotal()}
         onBack={() => setShowPreview(false)}
       />
@@ -120,28 +115,24 @@ export function InvoiceForm() {
       {/* Header */}
       <div className="bg-white border border-gray-200 p-8">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
-          <div className="flex items-center gap-4">
-            <div className="bg-primary p-3 rounded-lg">
-              <FileText className="h-8 w-8 text-white" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-cairo-bold text-primary">عرض سعر الكتروني</h1>
-              <p className="text-neutral-grey mt-1 font-cairo">نموذج عرض سعر الكتروني تابع لشركة القوس الماسي للمقاولات</p>
-            </div>
+          <div className="flex flex-col items-center gap-2 w-full">
+            <Image src="/main-logo.png" alt="شعار الشركة" width={52} height={52} />
+            <h1 className="text-2xl font-handicrafts text-primary text-center mt-2">عرض سعر الكتروني</h1>
+            {/* <p className="text-neutral-grey mt-1 font-handicrafts text-center">نموذج عرض سعر الكتروني تابع لشركة الفشني للدعاية والاعلان والتسويق الالكتروني</p> */}
           </div>
 
           <div className="flex gap-2">
             <Button
               variant="outline"
               onClick={() => setShowPreview(true)}
-              className="flex items-center gap-2 border-primary text-primary hover:bg-primary hover:text-white font-cairo"
+              className="flex items-center gap-2 border-primary text-primary hover:bg-primary hover:text-white font-handicrafts"
             >
               <Eye className="h-4 w-4 mr-2" />
               عرض
             </Button>
             <Button
               onClick={form.handleSubmit(onSubmit)}
-              className="bg-primary hover:bg-primary/90 text-white font-cairo"
+              className="bg-primary hover:bg-primary/90 text-white font-handicrafts"
             >
               <Save className="h-4 w-4 mr-2" />
               حفظ
@@ -154,9 +145,9 @@ export function InvoiceForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* Company Information */}
           <Card className="border border-gray-200 bg-white">
-            <CardHeader className="bg-primary/5 border-b border-gray-200">
-              <CardTitle className="flex items-center gap-3 text-xl text-primary font-cairo-bold">
-                <div className="h-3 w-3 bg-primary rounded-full"></div>
+            <CardHeader className="bg-gray-50 border-b border-gray-200">
+              <CardTitle className="flex items-center gap-3 text-xl text-neutral-grey font-handicrafts">
+                <div className="h-3 w-3 bg-neutral-grey rounded-full"></div>
                 تفاصيل الشركة
               </CardTitle>
             </CardHeader>
@@ -167,12 +158,12 @@ export function InvoiceForm() {
                   name="companyName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">اسم الشركة</FormLabel>
+                      <FormLabel className="text-sm font-handicrafts text-neutral-grey">اسم الشركة</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="اسم الشركة"
                           {...field}
-                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
+                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-handicrafts"
                         />
                       </FormControl>
                       <FormMessage />
@@ -184,29 +175,12 @@ export function InvoiceForm() {
                   name="companyAddress"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">العنوان</FormLabel>
+                      <FormLabel className="text-sm font-handicrafts text-neutral-grey">العنوان</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="العنوان"
                           {...field}
-                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="companyCity"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">المدينة</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="المدينة"
-                          {...field}
-                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
+                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-handicrafts"
                         />
                       </FormControl>
                       <FormMessage />
@@ -218,12 +192,12 @@ export function InvoiceForm() {
                   name="companyPhone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">رقم الهاتف</FormLabel>
+                      <FormLabel className="text-sm font-handicrafts text-neutral-grey">رقم الهاتف</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="رقم الهاتف"
                           {...field}
-                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
+                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-handicrafts"
                         />
                       </FormControl>
                       <FormMessage />
@@ -235,12 +209,12 @@ export function InvoiceForm() {
                   name="companyEmail"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">البريد الإلكتروني</FormLabel>
+                      <FormLabel className="text-sm font-handicrafts text-neutral-grey">البريد الإلكتروني</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="البريد الإلكتروني"
                           {...field}
-                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
+                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-handicrafts"
                         />
                       </FormControl>
                       <FormMessage />
@@ -252,12 +226,12 @@ export function InvoiceForm() {
                   name="vatNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">الرقم الضريبي</FormLabel>
+                      <FormLabel className="text-sm font-handicrafts text-neutral-grey">الرقم الضريبي</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="الرقم الضريبي"
                           {...field}
-                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
+                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-handicrafts"
                         />
                       </FormControl>
                       <FormMessage />
@@ -269,12 +243,12 @@ export function InvoiceForm() {
                   name="crNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">رقم السجل التجاري</FormLabel>
+                      <FormLabel className="text-sm font-handicrafts text-neutral-grey">رقم السجل الضريبي</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="رقم السجل التجاري"
+                          placeholder="رقم السجل الضريبي"
                           {...field}
-                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
+                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-handicrafts"
                         />
                       </FormControl>
                       <FormMessage />
@@ -287,9 +261,9 @@ export function InvoiceForm() {
 
           {/* Client Information */}
           <Card className="border border-gray-200 bg-white">
-            <CardHeader className="bg-secondary/5 border-b border-gray-200">
-              <CardTitle className="flex items-center gap-3 text-xl text-secondary font-cairo-bold">
-                <div className="h-3 w-3 bg-secondary rounded-full"></div>
+            <CardHeader className="bg-gray-50 border-b border-gray-200">
+              <CardTitle className="flex items-center gap-3 text-xl text-neutral-grey font-handicrafts">
+                <div className="h-3 w-3 bg-neutral-grey rounded-full"></div>
                 تفاصيل العميل
               </CardTitle>
             </CardHeader>
@@ -300,12 +274,12 @@ export function InvoiceForm() {
                   name="clientName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">اسم العميل</FormLabel>
+                      <FormLabel className="text-sm font-handicrafts text-neutral-grey">اسم العميل</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="اسم العميل"
                           {...field}
-                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
+                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-handicrafts"
                         />
                       </FormControl>
                       <FormMessage />
@@ -317,29 +291,12 @@ export function InvoiceForm() {
                   name="clientAddress"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">عنوان العميل</FormLabel>
+                      <FormLabel className="text-sm font-handicrafts text-neutral-grey">عنوان العميل</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="عنوان العميل"
                           {...field}
-                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="clientCity"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">مدينة العميل</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="مدينة العميل"
-                          {...field}
-                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
+                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-handicrafts"
                         />
                       </FormControl>
                       <FormMessage />
@@ -351,12 +308,12 @@ export function InvoiceForm() {
                   name="clientPhone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">هاتف العميل</FormLabel>
+                      <FormLabel className="text-sm font-handicrafts text-neutral-grey">هاتف العميل</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="هاتف العميل"
                           {...field}
-                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
+                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-handicrafts"
                         />
                       </FormControl>
                       <FormMessage />
@@ -368,12 +325,12 @@ export function InvoiceForm() {
                   name="clientEmail"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">بريد العميل الإلكتروني</FormLabel>
+                      <FormLabel className="text-sm font-handicrafts text-neutral-grey">بريد العميل الإلكتروني (اختياري)</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="بريد العميل الإلكتروني"
                           {...field}
-                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
+                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-handicrafts"
                         />
                       </FormControl>
                       <FormMessage />
@@ -385,12 +342,12 @@ export function InvoiceForm() {
                   name="clientVatNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">الرقم الضريبي للعميل (اختياري)</FormLabel>
+                      <FormLabel className="text-sm font-handicrafts text-neutral-grey">الرقم الضريبي للعميل (اختياري)</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="الرقم الضريبي للعميل"
                           {...field}
-                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
+                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-handicrafts"
                         />
                       </FormControl>
                       <FormMessage />
@@ -403,9 +360,9 @@ export function InvoiceForm() {
 
           {/* Invoice Details */}
           <Card className="border border-gray-200 bg-white">
-            <CardHeader className="bg-accent-blue-1/5 border-b border-gray-200">
-              <CardTitle className="flex items-center gap-3 text-xl text-accent-blue-1 font-cairo-bold">
-                <div className="h-3 w-3 bg-accent-blue-1 rounded-full"></div>
+            <CardHeader className="bg-gray-50 border-b border-gray-200">
+              <CardTitle className="flex items-center gap-3 text-xl text-neutral-grey font-handicrafts">
+                <div className="h-3 w-3 bg-neutral-grey rounded-full"></div>
                 تفاصيل العرض سعر الكتروني
               </CardTitle>
             </CardHeader>
@@ -416,12 +373,12 @@ export function InvoiceForm() {
                   name="invoiceNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">رقم عرض السعر الكتروني</FormLabel>
+                      <FormLabel className="text-sm font-handicrafts text-neutral-grey">رقم عرض السعر الكتروني</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="رقم عرض السعر الكتروني"
                           {...field}
-                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
+                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-handicrafts"
                         />
                       </FormControl>
                       <FormMessage />
@@ -433,12 +390,12 @@ export function InvoiceForm() {
                   name="invoiceDate"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">تاريخ عرض السعر الكتروني</FormLabel>
+                      <FormLabel className="text-sm font-handicrafts text-neutral-grey">تاريخ عرض السعر الكتروني</FormLabel>
                       <FormControl>
                         <Input
                           type="date"
                           {...field}
-                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
+                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-handicrafts"
                         />
                       </FormControl>
                       <FormMessage />
@@ -450,12 +407,12 @@ export function InvoiceForm() {
                   name="dueDate"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">تاريخ الاستحقاق</FormLabel>
+                      <FormLabel className="text-sm font-handicrafts text-neutral-grey">تاريخ الاستحقاق</FormLabel>
                       <FormControl>
                         <Input
                           type="date"
                           {...field}
-                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
+                          className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-handicrafts"
                         />
                       </FormControl>
                       <FormMessage />
@@ -467,10 +424,10 @@ export function InvoiceForm() {
                   name="currency"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-cairo-bold text-neutral-grey">العملة</FormLabel>
+                      <FormLabel className="text-sm font-handicrafts text-neutral-grey">العملة</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo">
+                          <SelectTrigger className="h-12 border-gray-300 focus:border-primary focus:ring-primary text-right font-handicrafts">
                             <SelectValue placeholder="اختر العملة" />
                           </SelectTrigger>
                         </FormControl>
@@ -494,9 +451,9 @@ export function InvoiceForm() {
           {/* Payment Terms and Notes */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card className="border border-gray-200 bg-white">
-              <CardHeader className="bg-accent-blue-2/5 border-b border-gray-200">
-                <CardTitle className="flex items-center gap-3 text-xl text-accent-blue-2 font-cairo-bold">
-                  <div className="h-3 w-3 bg-accent-blue-2 rounded-full"></div>
+              <CardHeader className="bg-gray-50 border-b border-gray-200">
+                <CardTitle className="flex items-center gap-3 text-xl text-neutral-grey font-handicrafts">
+                  <div className="h-3 w-3 bg-neutral-grey rounded-full"></div>
                   شروط الدفع
                 </CardTitle>
               </CardHeader>
@@ -510,7 +467,7 @@ export function InvoiceForm() {
                         <Textarea
                           placeholder="أدخل شروط الدفع..."
                           {...field}
-                          className="min-h-[120px] border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
+                          className="min-h-[120px] border-gray-300 focus:border-primary focus:ring-primary text-right font-handicrafts"
                         />
                       </FormControl>
                       <FormMessage />
@@ -521,8 +478,8 @@ export function InvoiceForm() {
             </Card>
 
             <Card className="border border-gray-200 bg-white">
-              <CardHeader className="bg-neutral-grey/5 border-b border-gray-200">
-                <CardTitle className="flex items-center gap-3 text-xl text-neutral-grey font-cairo-bold">
+              <CardHeader className="bg-gray-50 border-b border-gray-200">
+                <CardTitle className="flex items-center gap-3 text-xl text-neutral-grey font-handicrafts">
                   <div className="h-3 w-3 bg-neutral-grey rounded-full"></div>
                   ملاحظات إضافية
                 </CardTitle>
@@ -537,7 +494,7 @@ export function InvoiceForm() {
                         <Textarea
                           placeholder="أدخل ملاحظات إضافية (اختياري)..."
                           {...field}
-                          className="min-h-[120px] border-gray-300 focus:border-primary focus:ring-primary text-right font-cairo"
+                          className="min-h-[120px] border-gray-300 focus:border-primary focus:ring-primary text-right font-handicrafts"
                         />
                       </FormControl>
                       <FormMessage />
@@ -550,22 +507,22 @@ export function InvoiceForm() {
 
           {/* Summary */}
           <Card className="border border-gray-200 bg-white">
-            <CardHeader className="bg-primary/5 border-b border-gray-200">
-              <CardTitle className="flex items-center gap-3 text-xl text-primary font-cairo-bold">
-                <div className="h-3 w-3 bg-primary rounded-full"></div>
-                ملخص العرض سعر الكتروني
-              </CardTitle>
+            <CardHeader className="bg-gray-50 border-b border-gray-200">
+                              <CardTitle className="flex items-center gap-3 text-xl text-neutral-grey font-handicrafts">
+                  <div className="h-3 w-3 bg-neutral-grey rounded-full"></div>
+                  ملخص العرض سعر الكتروني
+                </CardTitle>
             </CardHeader>
             <CardContent className="p-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <h4 className="text-sm font-cairo-bold text-neutral-grey mb-2">عدد العناصر</h4>
-                  <p className="text-2xl font-cairo-bold text-primary">{items.length}</p>
+                  <h4 className="text-sm font-handicrafts text-neutral-grey mb-2">عدد العناصر</h4>
+                  <p className="text-2xl font-handicrafts text-primary">{items.length}</p>
                 </div>
 
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <h4 className="text-sm font-cairo-bold text-neutral-grey mb-2">المجموع الإجمالي</h4>
-                  <p className="text-2xl font-cairo-bold text-primary">
+                  <h4 className="text-sm font-handicrafts text-neutral-grey mb-2">المجموع الإجمالي</h4>
+                  <p className="text-2xl font-handicrafts text-primary">
                     {formatNumber(calculateTotal())} {form.watch("currency")}
                   </p>
                 </div>
